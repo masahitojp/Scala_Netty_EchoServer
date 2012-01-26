@@ -5,9 +5,9 @@ import org.jboss.netty.bootstrap.ServerBootstrap
 import org.jboss.netty.channel.{ChannelPipeline, ChannelPipelineFactory, Channels}
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory
 
-object EchoServer {
-  @throws(classOf[Exception])
-  def main(args: Array[String]): Unit = {
+class EchoServer(port: Int) {
+
+  def run(): Unit = {
     val bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(
       Executors.newCachedThreadPool(), Executors.newCachedThreadPool()
     ))
@@ -17,6 +17,14 @@ object EchoServer {
       def getPipeline(): ChannelPipeline = Channels.pipeline(new EchoServerHandler)
     })
 
-    bootstrap.bind(new InetSocketAddress(8080))
+    bootstrap.bind(new InetSocketAddress(port))
+  }
+}
+
+object EchoServer {
+  def main(args: Array[String]): Unit = {
+
+    val port = args(0).toInt
+    new EchoServer(port).run()
   }
 }
