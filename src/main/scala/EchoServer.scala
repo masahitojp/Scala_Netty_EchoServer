@@ -24,7 +24,16 @@ class EchoServer(port: Int) {
 object EchoServer {
   def main(args: Array[String]): Unit = {
 
-    val port = args(0).toInt
+    val defaultPort = 8080
+    val re = """^(\d+)$""".r
+    val port = args match {
+      case n if n.size ==1 =>
+        n(0) match {
+          case re(t) => t.toInt
+          case _ => defaultPort
+        }
+      case _ => defaultPort
+    }
     new EchoServer(port).run()
   }
 }
